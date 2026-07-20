@@ -12,6 +12,11 @@
     const CANVAS_WIDTH = 900;
     const CANVAS_HEIGHT = 700;
 
+    // Posicion vertical (dentro del canvas) donde se forma la primera fila
+    // de enemigos, y separacion vertical entre filas.
+    const FORMATION_TOP = 70;
+    const FORMATION_ROW_GAP = 45;
+
     const WEAPONS = {
         LASER: {
             id: 'laser',
@@ -274,7 +279,6 @@
             this.lastShot = 0;
             this.invulnerable = 0;
             this.trail = [];
-            this.engineParticles = [];
             this.engineParticles = [];
         }
 
@@ -837,6 +841,7 @@
 
             this.keys = {};
             this.mouseX = null;
+            this.touchActive = false;
             this.gameState = 'menu'; // menu, playing, paused, gameover, transition, weapon_select
 
             this.player = null;
@@ -933,6 +938,14 @@
             });
 
             // Touch
+            this.canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.touchActive = true;
+                const rect = this.canvas.getBoundingClientRect();
+                const scaleX = CANVAS_WIDTH / rect.width;
+                this.mouseX = (e.touches[0].clientX - rect.left) * scaleX;
+            });
+
             this.canvas.addEventListener('touchmove', (e) => {
                 e.preventDefault();
                 const rect = this.canvas.getBoundingClientRect();
@@ -942,6 +955,7 @@
 
             this.canvas.addEventListener('touchend', () => {
                 this.mouseX = null;
+                this.touchActive = false;
             });
         }
 
@@ -1090,11 +1104,18 @@
                 const col = this.waveSpawned % cols;
                 const row = Math.floor(this.waveSpawned / cols);
                 x = colWidth * (col + 1.5);
-                y = -30 - (row * 50);
+                // Posicion de formacion DENTRO de la pantalla (antes daba negativo,
+                // por eso los enemigos quedaban flotando fuera de camara).
+                y = FORMATION_TOP + (row * FORMATION_ROW_GAP);
             }
 
             this.enemies.push(new Enemy(type, x, y, this.currentScenario));
             this.waveSpawned++;
+        }
+
+        spawnBoss() {
+            this.bossSpawned = true;
+            this.enemies.push(new Enemy('boss', CANVAS_WIDTH / 2, 100, this.currentScenario));
         }
 
         spawnPowerUp(x, y) {
@@ -1377,7 +1398,7 @@
             this.player.update(this.keys, this.mouseX);
 
             // Disparar
-            if (this.keys[' '] || this.keys['Space']) {
+            if (this.keys[' '] || this.keys['Space'] || this.touchActive) {
                 const newBullets = this.player.shoot(performance.now());
                 this.bullets.push(...newBullets);
             }
@@ -1388,7 +1409,6 @@
                 if (this.waveDelay > 800) {
                     this.spawnEnemy();
                     this.waveDelay = 0;
-                    console.log('Enemy spawned! Total:', this.enemies.length, 'Wave spawned:', this.waveSpawned, 'Wave enemies:', this.waveEnemies);
                 }
             }
 
@@ -1406,9 +1426,6 @@
                 if (e.active) allEnemiesDead = false;
             });
             this.enemies = this.enemies.filter(e => e.active);
-            if (this.enemies.length > 0) {
-                console.log('Enemies active:', this.enemies.length, 'Positions:', this.enemies.map(e => ({x: Math.round(e.x), y: Math.round(e.y), entering: e.entering})));
-            }
 
             // Actualizar powerups
             this.powerups.forEach(p => p.update());
@@ -1427,8 +1444,14 @@
 
             // Verificar si la wave termino
             if (allEnemiesDead && this.waveSpawned >= this.waveEnemies) {
-                if (this.level % 5 === 0 && !this.bossSpawned) {
-                    // Boss level
+                if (this.level % 5 === 0) {
+                    // Nivel de boss: primero aparece el boss, y una vez
+                    // derrotado se pasa al siguiente escenario.
+                    if (!this.bossSpawned) {
+                        this.spawnBoss();
+                    } else {
+                        this.nextLevel();
+                    }
                 } else {
                     this.wave++;
                     if (this.wave > 3) {
