@@ -504,7 +504,7 @@
                     this.entering = false;
                     this.y = this.formationY;
                 }
-                return;
+                return [];
             }
 
             this.angle += 0.05;
