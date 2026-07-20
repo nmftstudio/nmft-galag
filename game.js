@@ -476,7 +476,7 @@
             const config = ENEMY_TYPES[type.toUpperCase()] || ENEMY_TYPES.GRUNT;
             this.type = config.type;
             this.x = x;
-            this.y = y;
+            this.y = y - 80; // Empieza 80px arriba de la posición de formación
             this.hp = config.hp;
             this.maxHp = config.hp;
             this.speed = config.speed;
