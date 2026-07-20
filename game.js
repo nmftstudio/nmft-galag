@@ -275,6 +275,7 @@
             this.invulnerable = 0;
             this.trail = [];
             this.engineParticles = [];
+            this.engineParticles = [];
         }
 
         update(keys, mouseX) {
