@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMFT Galaga - Arcade Space Shooter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Pantalla de inicio -->
+        <div id="start-screen" class="screen active">
+            <div class="logo">
+                <h1>NMFT</h1>
+                <h2>GALAGA</h2>
+                <p class="subtitle">ARCADE SPACE SHOOTER</p>
+            </div>
+            <div class="menu-options">
+                <button id="btn-start" class="menu-btn">INICIAR JUEGO</button>
+                <button id="btn-instructions" class="menu-btn">INSTRUCCIONES</button>
+                <button id="btn-credits" class="menu-btn">CREDITOS</button>
+            </div>
+            <div class="high-score-display">
+                <span>MEJOR PUNTUACION: </span><span id="high-score">0</span>
+            </div>
+        </div>
+
+        <!-- Pantalla de instrucciones -->
+        <div id="instructions-screen" class="screen">
+            <h2>INSTRUCCIONES</h2>
+            <div class="instructions-content">
+                <div class="instruction-item">
+                    <span class="key">← →</span>
+                    <span>Mover nave</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">ESPACIO</span>
+                    <span>Disparar</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">P</span>
+                    <span>Pausar juego</span>
+                </div>
+                <div class="instruction-item">
+                    <span class="key">1-4</span>
+                    <span>Cambiar arma (desbloqueadas)</span>
+                </div>
+                <div class="powerup-info">
+                    <h3>POWER-UPS:</h3>
+                    <div class="powerup-item"><span class="powerup-icon" style="background:#ff0">★</span> Estrella - Puntos extra</div>
+                    <div class="powerup-item"><span class="powerup-icon" style="background:#0f0">W</span> Arma - Mejora de arma</div>
+                    <div class="powerup-item"><span class="powerup-icon" style="background:#f0f">S</span> Escudo - Proteccion temporal</div>
+                    <div class="powerup-item"><span class="powerup-icon" style="background:#0ff">L</span> Vida - Vida extra</div>
+                </div>
+            </div>
+            <button id="btn-back-inst" class="menu-btn">VOLVER</button>
+        </div>
+
+        <!-- Pantalla de creditos -->
+        <div id="credits-screen" class="screen">
+            <h2>CREDITOS</h2>
+            <div class="credits-content">
+                <p><strong>NMFT Studio</strong></p>
+                <p>Desarrollo Indie Boutique</p>
+                <p>nmft.ar</p>
+                <div class="separator"></div>
+                <p>Inspirado en el clasico Galaga</p>
+                <p>Desarrollado con amor para la comunidad</p>
+            </div>
+            <button id="btn-back-cred" class="menu-btn">VOLVER</button>
+        </div>
+
+        <!-- HUD del juego -->
+        <div id="hud" class="hidden">
+            <div class="hud-top">
+                <div class="hud-left">
+                    <div class="score-box">
+                        <span class="label">PUNTUACION</span>
+                        <span id="score">0</span>
+                    </div>
+                    <div class="level-box">
+                        <span class="label">ESCENARIO</span>
+                        <span id="level">1</span>
+                    </div>
+                </div>
+                <div class="hud-center">
+                    <div class="weapon-box">
+                        <span class="label">ARMA</span>
+                        <span id="weapon-name">LASER SIMPLE</span>
+                        <div class="weapon-bar">
+                            <div id="weapon-progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hud-right">
+                    <div class="lives-box">
+                        <span class="label">VIDAS</span>
+                        <div id="lives"></div>
+                    </div>
+                    <div class="shield-box">
+                        <span class="label">ESCUDO</span>
+                        <div class="shield-bar">
+                            <div id="shield-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canvas del juego -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Pantalla de pausa -->
+        <div id="pause-screen" class="screen hidden">
+            <h2>PAUSA</h2>
+            <div class="pause-menu">
+                <button id="btn-resume" class="menu-btn">CONTINUAR</button>
+                <button id="btn-restart-pause" class="menu-btn">REINICIAR</button>
+                <button id="btn-menu-pause" class="menu-btn">MENU PRINCIPAL</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de game over -->
+        <div id="gameover-screen" class="screen hidden">
+            <h2>GAME OVER</h2>
+            <div class="final-stats">
+                <div class="stat">
+                    <span class="stat-label">PUNTUACION FINAL</span>
+                    <span id="final-score" class="stat-value">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">ESCENARIO ALCANZADO</span>
+                    <span id="final-level" class="stat-value">1</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">ENEMIGOS DESTRUIDOS</span>
+                    <span id="final-enemies" class="stat-value">0</span>
+                </div>
+                <div class="stat new-record hidden">
+                    <span class="stat-label">¡NUEVO RECORD!</span>
+                </div>
+            </div>
+            <div class="gameover-menu">
+                <button id="btn-retry" class="menu-btn">INTENTAR DE NUEVO</button>
+                <button id="btn-menu" class="menu-btn">MENU PRINCIPAL</button>
+            </div>
+        </div>
+
+        <!-- Pantalla de transicion de nivel -->
+        <div id="level-transition" class="screen hidden">
+            <div class="transition-content">
+                <h2 id="transition-title">ESCENARIO COMPLETADO</h2>
+                <p id="transition-subtitle">Preparando siguiente zona...</p>
+                <div class="scenario-preview" id="scenario-preview"></div>
+            </div>
+        </div>
+
+        <!-- Pantalla de seleccion de arma -->
+        <div id="weapon-select" class="screen hidden">
+            <h2>SELECCIONA TU ARMA</h2>
+            <div class="weapons-grid" id="weapons-grid"></div>
+            <p class="weapon-hint">Presiona 1-4 durante el juego para cambiar</p>
+            <button id="btn-continue-weapon" class="menu-btn">CONTINUAR</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>

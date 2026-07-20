@@ -1,0 +1,596 @@
+/* ============================================
+   NMFT GALAGA - ARCADE SPACE SHOOTER
+   Estilos completos del juego
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+    --neon-cyan: #00f0ff;
+    --neon-pink: #ff00ff;
+    --neon-green: #00ff88;
+    --neon-yellow: #ffff00;
+    --neon-red: #ff0044;
+    --neon-purple: #aa00ff;
+    --neon-orange: #ff8800;
+    --dark-bg: #0a0a1a;
+    --darker-bg: #050510;
+    --hud-bg: rgba(10, 10, 30, 0.85);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--dark-bg);
+    font-family: 'Orbitron', monospace;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 900px;
+    max-height: 700px;
+    background: var(--darker-bg);
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 240, 255, 0.15);
+}
+
+/* ============================================
+   CANVAS
+   ============================================ */
+#game-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 1;
+}
+
+/* ============================================
+   PANTALLAS
+   ============================================ */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    background: rgba(5, 5, 16, 0.95);
+    padding: 20px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.screen.hidden {
+    display: none !important;
+}
+
+/* ============================================
+   PANTALLA DE INICIO
+   ============================================ */
+#start-screen {
+    background: 
+        radial-gradient(ellipse at center, rgba(0, 240, 255, 0.05) 0%, transparent 70%),
+        var(--darker-bg);
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 40px;
+    animation: logoPulse 3s ease-in-out infinite;
+}
+
+.logo h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 3.5rem;
+    color: var(--neon-cyan);
+    text-shadow: 
+        0 0 10px var(--neon-cyan),
+        0 0 20px var(--neon-cyan),
+        0 0 40px var(--neon-cyan);
+    letter-spacing: 8px;
+    margin-bottom: 5px;
+}
+
+.logo h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2rem;
+    color: var(--neon-pink);
+    text-shadow: 
+        0 0 10px var(--neon-pink),
+        0 0 20px var(--neon-pink);
+    letter-spacing: 6px;
+    margin-bottom: 10px;
+}
+
+.logo .subtitle {
+    font-size: 0.9rem;
+    color: var(--neon-yellow);
+    letter-spacing: 4px;
+    opacity: 0.8;
+}
+
+@keyframes logoPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.menu-btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 12px 40px;
+    background: transparent;
+    border: 2px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    min-width: 280px;
+    position: relative;
+    overflow: hidden;
+}
+
+.menu-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.menu-btn:hover::before {
+    left: 100%;
+}
+
+.menu-btn:hover {
+    background: rgba(0, 240, 255, 0.1);
+    box-shadow: 
+        0 0 15px rgba(0, 240, 255, 0.3),
+        inset 0 0 15px rgba(0, 240, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.menu-btn:active {
+    transform: translateY(0);
+}
+
+.high-score-display {
+    font-size: 0.85rem;
+    color: var(--neon-yellow);
+    letter-spacing: 2px;
+}
+
+/* ============================================
+   INSTRUCCIONES
+   ============================================ */
+#instructions-screen h2,
+#credits-screen h2,
+#pause-screen h2,
+#gameover-screen h2,
+#weapon-select h2 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 15px var(--neon-cyan);
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+}
+
+.instructions-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 30px;
+    max-width: 400px;
+}
+
+.instruction-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.key {
+    display: inline-block;
+    padding: 5px 12px;
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    min-width: 80px;
+    text-align: center;
+    border-radius: 3px;
+}
+
+.powerup-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.powerup-info h3 {
+    color: var(--neon-yellow);
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.powerup-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ccc;
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+}
+
+.powerup-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: #000;
+}
+
+/* ============================================
+   CREDITOS
+   ============================================ */
+.credits-content {
+    text-align: center;
+    color: #ccc;
+    margin-bottom: 30px;
+}
+
+.credits-content p {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.credits-content strong {
+    color: var(--neon-cyan);
+    font-size: 1.2rem;
+}
+
+.separator {
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+    margin: 15px auto;
+}
+
+/* ============================================
+   HUD
+   ============================================ */
+#hud {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    padding: 8px 15px;
+    background: linear-gradient(180deg, rgba(5, 5, 16, 0.9) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.hud-left, .hud-right {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.hud-center {
+    text-align: center;
+}
+
+.label {
+    display: block;
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+}
+
+.score-box, .level-box, .weapon-box, .lives-box, .shield-box {
+    text-align: center;
+}
+
+#score, #level, #weapon-name {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+#weapon-name {
+    font-size: 0.6rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-green);
+}
+
+.weapon-bar, .shield-bar {
+    width: 80px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 3px;
+    overflow: hidden;
+}
+
+#weapon-progress, #shield-fill {
+    height: 100%;
+    background: var(--neon-green);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 5px var(--neon-green);
+}
+
+#shield-fill {
+    background: var(--neon-cyan);
+    box-shadow: 0 0 5px var(--neon-cyan);
+}
+
+#lives {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+}
+
+.life-icon {
+    width: 12px;
+    height: 12px;
+    background: var(--neon-red);
+    clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
+    box-shadow: 0 0 5px var(--neon-red);
+}
+
+/* ============================================
+   PAUSA
+   ============================================ */
+.pause-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ============================================
+   GAME OVER
+   ============================================ */
+.final-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.6rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 3px;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.new-record .stat-label {
+    color: var(--neon-yellow);
+    font-size: 0.8rem;
+    animation: blink 1s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+.gameover-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* ============================================
+   TRANSICION DE NIVEL
+   ============================================ */
+#level-transition {
+    background: rgba(5, 5, 16, 0.95);
+}
+
+.transition-content {
+    text-align: center;
+}
+
+#transition-title {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.2rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 15px var(--neon-green);
+    margin-bottom: 15px;
+    animation: fadeInUp 0.5s ease;
+}
+
+#transition-subtitle {
+    color: #ccc;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.7s ease;
+}
+
+.scenario-preview {
+    width: 200px;
+    height: 120px;
+    margin: 0 auto;
+    border: 2px solid var(--neon-cyan);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.9s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   SELECCION DE ARMA
+   ============================================ */
+.weapons-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+    max-width: 400px;
+}
+
+.weapon-card {
+    border: 2px solid rgba(0, 240, 255, 0.3);
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: rgba(0, 240, 255, 0.05);
+}
+
+.weapon-card:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.weapon-card.selected {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.weapon-card.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.weapon-card .weapon-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.weapon-card .weapon-title {
+    font-size: 0.75rem;
+    color: var(--neon-cyan);
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.weapon-card .weapon-desc {
+    font-size: 0.65rem;
+    color: #888;
+}
+
+.weapon-card .weapon-key {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 8px;
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.55rem;
+    border-radius: 3px;
+}
+
+.weapon-hint {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+    margin-bottom: 15px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 600px) {
+    .logo h1 {
+        font-size: 2rem;
+        letter-spacing: 4px;
+    }
+    .logo h2 {
+        font-size: 1.2rem;
+        letter-spacing: 3px;
+    }
+    .menu-btn {
+        min-width: 220px;
+        font-size: 0.8rem;
+        padding: 10px 25px;
+    }
+    .weapons-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+.hidden {
+    display: none !important;
+}
