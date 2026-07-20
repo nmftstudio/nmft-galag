@@ -1388,6 +1388,7 @@
                 if (this.waveDelay > 800) {
                     this.spawnEnemy();
                     this.waveDelay = 0;
+                    console.log('Enemy spawned! Total:', this.enemies.length, 'Wave spawned:', this.waveSpawned, 'Wave enemies:', this.waveEnemies);
                 }
             }
 
@@ -1405,6 +1406,9 @@
                 if (e.active) allEnemiesDead = false;
             });
             this.enemies = this.enemies.filter(e => e.active);
+            if (this.enemies.length > 0) {
+                console.log('Enemies active:', this.enemies.length, 'Positions:', this.enemies.map(e => ({x: Math.round(e.x), y: Math.round(e.y), entering: e.entering})));
+            }
 
             // Actualizar powerups
             this.powerups.forEach(p => p.update());
